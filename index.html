@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaTech</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing:border-box;
+            msrgin:0;
+            padding:0;
+        }
+        :root {
+      --bg:        #0b0f1a;   /* deep navy background */
+      --surface:   #131929;   /* slightly lighter card background */
+      --accent:    #4f8ef7;   /* bright blue accent */
+      --accent2:   #a78bfa;   /* soft purple secondary accent */
+      --text:      #e8eaf2;   /* near-white body text */
+      --muted:     #8892a4;   /* grey for secondary text */
+      --border:    #1e2a3d;   /* subtle border color */
+      --font-head: 'Sora',  sans-serif;
+      --font-body: 'Lato',  sans-serif;
+        }
+        html {
+            scroll-behaviour: smooth;
+        }
+        body{
+            background-color: #0b0f1a;
+            color: #e8eaf2;
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        nav{
+            position:fixed;
+            top:0;
+            width:100%;
+            background:rgba(11, 15, 26, 0.92);
+            background-filter:blur(10px);
+            border-bottom: 1px solid #1e2a3d;
+            padding:16px 5%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            z-index:100;
+        }
+        .nav-logo {
+            font-family: var(--font-head);
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+        .nav-links{
+            list-style:none;
+            display:flex;
+            gap:28px;
+        }
+        .nav-links a{
+            color: var(--muted);
+            text-decoration:none;
+            font-size:0.9rem;
+            transition:color 0.2s ease;
+        }
+        .nav-links a:hover{
+            color:var(--text);
+        }
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .mobile-dropdown {
+            display: none;
+            position: fixed;
+            top: 72px;
+            right: 5%;
+            left: 5%;
+            background: rgba(19, 25, 41, 0.98);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            z-index: 99;
+        }
+        .mobile-dropdown.open {
+            display: block;
+        }
+        .mobile-dropdown a {
+            display: block;
+            padding: 10px 12px;
+            color: var(--muted);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .mobile-dropdown a:hover {
+            background: rgba(79, 142, 247, 0.12);
+            color: var(--text);
+        }
+
+        section{
+            padding: 100px 5%;
+            margin: 0 auto; 
+            max-width: 1100px;
+        }
+        #hero{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding-top:80px;
+            position: relative;
+            overflow: hidden;
+        }
+        #hero::before,
+        #hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);      /* soft glow effect */
+            opacity: 0.18;
+            pointer-events: none;     /* clicks pass through this element */
+        }
+        #hero::before {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: 10%;
+            left: 10%;
+        }
+        #hero::after {
+            width: 600px;
+            height: 600px;
+            background: var(--accent2);
+            bottom: 10%;
+            right: 10%;
+        }
+        .hero-badge {
+            background: rgba(79, 142, 247, 0.12);
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        .hero-title{
+            font-family: var(--font-head);
+            font-weight: 900;
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            max-width:780px;
+            margin-bottom: 20px;
+        }
+        .hero-title .highlight{
+                background: linear-gradient(90deg, var(--accent), var(--accent2));
+                -webkit-background-clip: text;  /* clips gradient to text shape */
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+
+        }
+        .hero-tagline{
+            color: var(--muted);
+            font-size: 1.15rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+        .btn-primary{
+            background: linear-gradient(135deg, var(--accent), #2563eb);
+            color: #fff;
+            padding: 14px 36px;
+            border:none;
+            border-radius: 8px;
+            font-size:1rem;
+            text-decoration:none;
+            font-weight: 700;
+            font-family:var(--font-head);
+            cursor:pointer;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 24px rgba(79, 142, 247, 0.3);
+        }
+        .btn-primary:hover{
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(79, 142, 247, 0.45);
+        }
+        #about{
+            border-top: 1px solid var(--border);
+        }
+        .accent-bar{
+            width: 48px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            margin-bottom: 18px;
+            border-radius: 4px;
+        }
+        .about-text{
+            font-size:1rem;
+            color:var(--muted);
+            max-width:640px;
+            line-height:1.85rem;
+        }
+        #features{
+            border-top: 1px solid var(--border);
+        }
+        .features-grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap:24px;
+        }
+        .feature-card{
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px 28px;
+            transition: border-color 0.25s, transform 0.25s;
+        }
+        .feature-card:hover{
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        .feature-icon{
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display:block;
+        }
+        .feature-title{
+            font-family: var(--font-head);
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            font-weight:200;
+            color: var(--text);
+
+        }
+        .feature-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        #contact{
+            border-top: 1px solid var(--border);
+        }
+        .contact-box{
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 44px;
+            max-width: 560px;
+        }
+        .form-group{
+            margin-bottom: 20px;
+        }
+        .form-group label{
+            display:block;
+            margin-bottom: 6px;
+            font-size:0.85rem;
+            font-weight:700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+        .form-group input,
+        .form-group textarea{
+            width:100%;
+            padding:12px 16px;
+            border:1px solid var(--border);
+            border-radius:8px;
+            background: transparent;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline:none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus{
+            border-color: var(--accent);
+        }
+        .form-group textarea{
+            resize: vertical;
+            min-height: 120px;
+        }
+        .btn-submit{
+            background: linear-gradient(135deg, var(--accent), #2563eb);
+            color: #fff;
+            padding: 13px 32px;
+            border:none;
+            border-radius: 8px;
+            font-size:1rem;
+            font-weight: 700;
+            font-family:var(--font-head);
+            cursor:pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%; 
+        }
+        .btn-submit:hover{
+            box-shadow: 0 8px 28px rgba(79, 142, 247, 0.4);
+            transform: translateY(-2px);
+        }
+        #form-success{
+            display:none;
+            margin-top: 16px;
+            color: var(--accent);
+            background: rgba(79, 142, 247, 0.1);
+            border: 1px solid rgba(79, 142, 247, 0.3);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        footer{
+            order-top: 1px solid var(--border);
+            text-align: center;
+            padding: 32px 5%;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        footer span{
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .contact-box {
+                padding: 28px 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class= "nav-logo">NovaTech</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <div class="mobile-dropdown" id="mobileMenu">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <section id="hero">
+        <span class="hero-badge"> ✦ AI-Powered for Students</span>
+        <h1 class="hero-title">
+          Study Smarter,<br />
+          Not <span class="highlight">Harder</span>
+        </h1>
+        <p class="hero-tagline">
+          NovaTech uses AI to help you plan, focus, and ace your academics — effortlessly.
+        </p>
+        <a href="#contact" class="btn-primary">Get Early Access</a>
+    </section >
+     
+    
+    <section id="about">
+        <div class="accent-bar"></div>
+        <h2 class="section-title">About NovaTech</h2>
+        <p class="about-text">NovaTech is an AI-powered productivity platform built specifically for students.
+         It analyzes your syllabus, study habits, and deadlines to create personalized
+         learning plans that actually work. Whether you're preparing for exams or managing
+         multiple assignments, NovaTech keeps you focused, organized, and one step ahead.
+        </p>    
+
+    </section>
+
+    <section id="features">
+        <div class="accent-bar"></div>
+        <h2 class="section-title">What NovaTech Offers</h2>
+        <p class="section-subtitle">Three tools designed to take the stress out of studying</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <h3 class="feature-title">Smart Study Planner</h3>
+                <p>
+                    AI builds a personalized daily study schedule based on your subjects,
+                    deadlines, and energy levels — so you never cram again
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">📄</span>
+                <h3 class="feature-title">Instant Note Summarizer</h3>
+                <p>
+                    Paste any lecture notes or textbook chapter and get a clean, concise
+                    summary with key points highlighted for quick revision
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⏰</span>
+                <h3 class="feature-title">Focus Mode</h3>
+                <p>
+                    Block distractions and boost productivity with a customizable focus timer
+                    that adapts to your workflow and study sessions
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section id="contact">
+        <div class="accent-bar"></div>
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-subtitle">
+            Interested in early access? Drop us a message and we'll reach out
+        </p>
+
+        <div class="contact-box">
+            <form id="contactForm" onsubmit="return false">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" placeholder="e.g. Arjun Sharma" required/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="e.g. arjun@example.com" required/>
+                </div>
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" placeholder="Tell us about yourself or what you'd like to know..." required></textarea>
+                </div>
+                <button class="btn-submit" onclick="handleSubmit()">Send Message</button>
+            </form>
+
+            <div id="form-success">
+                 ✅ Thanks for reaching out! We'll get back to you soon
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+         <p>© 2026 <span>NovaTech</span>. Built for students, by students.</p>
+    </footer>
+
+
+    <script>
+
+    function handleSubmit() {
+
+      var name    = document.getElementById('name').value.trim();
+      var email   = document.getElementById('email').value.trim();
+      var message = document.getElementById('message').value.trim();
+
+      if (name === '' || email === '' || message === '') {
+        alert('Please fill in all fields before submitting.');
+        return; 
+      }
+
+      document.getElementById('contactForm').style.display = 'none';
+
+      var successBox = document.getElementById('form-success');
+      successBox.style.display = 'block'; // overrides display:none from CSS
+    }
+
+        var menuToggle = document.getElementById('menuToggle');
+        var mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', function () {
+            var isOpen = mobileMenu.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                mobileMenu.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+  </script>
+
+</body>
+</html>
